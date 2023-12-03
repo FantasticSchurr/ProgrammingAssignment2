@@ -4,12 +4,12 @@
 makeCacheMatrix <- function(x = matrix()) {
   
     ## This is where the inverse will be stored / Initialized.
-    I <- NULL           
+    Inv <- NULL           
    
     ## Set the matrix.
     set     <- function(y) { 
                 x <<- y
-                I <<- NULL
+                Inv <<- NULL
   }
   
     ## Now we want to get the matrix.
@@ -19,12 +19,12 @@ makeCacheMatrix <- function(x = matrix()) {
     
     ## Set up inverse function of the matrix.
     setmatr <- function(inverse) {
-      I <<- inverse
+      Inv <<- inverse
     }
     
     ## Get the inverse and return it.
     getmatr <<- function() {
-      I
+      Inv
     }
     
     ## This returns a list of methods
@@ -37,27 +37,37 @@ makeCacheMatrix <- function(x = matrix()) {
 ## Write a short comment describing this function:
 ## This following function calculates the inverse of the special matrix created with the above function. 
 ## First, it checks to see if the inverse has already been calculated. 
+## If it has already been calculated, hen it should retrieve the inverse form the cache.
 
 cacheSolve <- function(x, ...) {
   
   ## Return a matrix that is the inverse of 'x'
-  I <- x$getmatr()
+  Inv <- x$getmatr()
   
   ## Return the inverse if already set
-  if( !is.null(I) ) {
+  if( !is.null(Inv) ) {
     message("getting cached data")
-    return(I)
+    return(Inv)
   }
   
   ## Get the matrix from object
   data <- x$get()
   
   ## Calculation of the inverse using matrix multiplication
-  I <- solve(data, ...)
+  Inv <- solve(data, ...)
   
   ## Set the inverse to object
-  x$setmatr(I)
+  x$setmatr(Inv)
   
   ## Returns the matrix
-  I
+  Inv
 }
+
+
+### Testing my functions ###
+
+test_matrix <- makeCacheMatrix(matrix(rnorm(1:4), 2, 2))
+
+cacheSolve(test_matrix)
+
+## Seems okay!
